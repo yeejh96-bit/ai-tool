@@ -1,4 +1,3 @@
-// 제공해주신 초기 사이트 링크 데이터
 const defaultSites = [
     { name: "Gemini", url: "https://gemini.google.com/app?hl=ko" },
     { name: "AI Studio", url: "https://aistudio.google.com/prompts/new_chat" },
@@ -6,7 +5,6 @@ const defaultSites = [
     { name: "Opal", url: "https://opal.google/" }
 ];
 
-// 로컬 스토리지에서 데이터 불러오기, 없으면 기본값 사용
 let sites = JSON.parse(localStorage.getItem('aiSites'));
 if (!sites || sites.length === 0) {
     sites = defaultSites;
@@ -21,30 +19,46 @@ const saveBtn = document.getElementById('saveBtn');
 const nameInput = document.getElementById('siteName');
 const urlInput = document.getElementById('siteUrl');
 
-// 데이터를 로컬 스토리지에 저장
 function saveSites() {
     localStorage.setItem('aiSites', JSON.stringify(sites));
 }
 
-// 화면에 사이트 카드 렌더링
 function renderSites() {
     grid.innerHTML = '';
-    sites.forEach(site => {
+    sites.forEach((site, index) => {
         const card = document.createElement('a');
         card.href = site.url;
-        card.target = "_blank"; // 새 창에서 열기
+        card.target = "_blank";
         card.className = "card";
-        card.innerHTML = `<h3>${site.name}</h3>`;
+
+        // 삭제 버튼 생성 및 이벤트 추가
+        const deleteBtn = document.createElement('button');
+        deleteBtn.className = 'delete-btn';
+        deleteBtn.innerText = '삭제';
+        deleteBtn.onclick = (e) => {
+            e.preventDefault(); // 클릭 시 링크로 이동하는 기본 동작 방지
+            if(confirm(`'${site.name}' 사이트를 삭제하시겠습니까?`)) {
+                sites.splice(index, 1); // 배열에서 해당 항목 삭제
+                saveSites();            // 변경된 배열 저장
+                renderSites();          // 화면 다시 그리기
+            }
+        };
+
+        // 타이틀 생성
+        const title = document.createElement('h3');
+        title.innerText = site.name;
+
+        // 카드에 요소 추가
+        card.appendChild(deleteBtn);
+        card.appendChild(title);
         grid.appendChild(card);
     });
 }
 
-// 팝업 열기
 addBtn.onclick = () => {
     modal.style.display = 'flex';
 };
 
-// 팝업 닫기 및 입력창 초기화
 function closeModal() {
     modal.style.display = 'none';
     nameInput.value = '';
@@ -52,7 +66,6 @@ function closeModal() {
 }
 cancelBtn.onclick = closeModal;
 
-// 새 사이트 저장 로직
 saveBtn.onclick = () => {
     const name = nameInput.value.trim();
     const url = urlInput.value.trim();
@@ -67,5 +80,4 @@ saveBtn.onclick = () => {
     }
 };
 
-// 초기 화면 렌더링
 renderSites();
