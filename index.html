@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 워크스페이스</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>AI 사이트 대시보드</h1>
+        <button id="addSiteBtn">사이트 추가</button>
+    </header>
+
+    <main id="dashboardGrid" class="grid-container"></main>
+
+    <div id="addSiteModal" class="modal">
+        <div class="modal-content">
+            <h2>새 사이트 추가</h2>
+            <input type="text" id="siteName" placeholder="사이트 이름 (예: Gemini)">
+            <input type="url" id="siteUrl" placeholder="URL (https://...)">
+            <div class="modal-actions">
+                <button id="saveBtn" class="primary-btn">저장</button>
+                <button id="cancelBtn" class="secondary-btn">취소</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
